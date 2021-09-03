@@ -30,7 +30,7 @@ public class CuisineService {
     }
 
     public ResponseEntity<?> saveCuisine(Cuisine cuisine) {
-        return new ResponseEntity<>(cuisineRepository.save(cuisine), HttpStatus.OK);
+        return new ResponseEntity<>(cuisineRepository.save(cuisine), HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> deleteCuisine(Long id) {

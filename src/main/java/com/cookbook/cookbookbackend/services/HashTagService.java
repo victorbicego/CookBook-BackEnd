@@ -31,7 +31,7 @@ public class HashTagService {
     }
 
     public ResponseEntity<?> saveHashTag(HashTag hashTag) {
-        return new ResponseEntity<>(hashTagRepository.save(hashTag), HttpStatus.OK);
+        return new ResponseEntity<>(hashTagRepository.save(hashTag), HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> deleteHashTag(Long id) {

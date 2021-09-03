@@ -3,6 +3,7 @@ package com.cookbook.cookbookbackend.controllers;
 import com.cookbook.cookbookbackend.models.Cuisine;
 import com.cookbook.cookbookbackend.services.CuisineService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,20 @@ public class CuisineControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private final Cuisine cuisineTest1 = new Cuisine();
+    private final Cuisine cuisineTest2 = new Cuisine();
+
+    @BeforeEach
+    public void init(){
+        cuisineTest1.setCountry("countryTest1");
+        cuisineTest1.setContinent("continentTest1");
+        cuisineTest1.setId(5L);
+    }
+
     @Test
     @DisplayName("Test Post - OK")
     public void testPost() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
-        cuisineTest1.setContinent("continentTest1");
-
-        ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(cuisineTest1, HttpStatus.OK);
+        ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(cuisineTest1, HttpStatus.CREATED);
 
         doReturn(responseEntityAnswer).when(cuisineService).saveCuisine(cuisineTest1);
 
@@ -49,7 +56,7 @@ public class CuisineControllerTests {
                 .post("/api/cuisine/post")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cuisineTest1)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(cuisineTest1)));
 
     }
@@ -57,9 +64,7 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Post - Invalid because country is empty")
     public void testPostInvalidCountryEmpty() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
         cuisineTest1.setCountry("");
-        cuisineTest1.setContinent("continentTest1");
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/cuisine/post")
@@ -71,9 +76,7 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Post - Invalid because country is longer than 50")
     public void testPostInvalidCountryToLong() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
         cuisineTest1.setCountry("Lorem ipsum dolor sit amet, consectetur erat curae.");
-        cuisineTest1.setContinent("continentTest1");
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/cuisine/post")
@@ -85,8 +88,6 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Post - Invalid because continent is empty")
     public void testPostInvalidContinentEmpty() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
         cuisineTest1.setContinent("");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -99,8 +100,6 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Post - Invalid because continent is longer than 50")
     public void testPostInvalidContinentToLong() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
         cuisineTest1.setContinent("Lorem ipsum dolor sit amet, consectetur erat curae.");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -113,11 +112,6 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Get By ID - OK")
     public void testGetOK() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
-        cuisineTest1.setContinent("continentTest1");
-        cuisineTest1.setId(5L);
-
         ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(cuisineTest1, HttpStatus.OK);
 
         doReturn(responseEntityAnswer).when(cuisineService).findCuisineById(5L);
@@ -145,12 +139,6 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Get All Success")
     public void testGetAllSuccess() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
-        cuisineTest1.setContinent("continentTest1");
-        Cuisine cuisineTest2 = new Cuisine();
-        cuisineTest2.setCountry("countryTest2");
-        cuisineTest2.setContinent("continentTest2");
         List<Cuisine> cuisineList = new ArrayList<>(List.of(cuisineTest1,cuisineTest2));
 
         ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(cuisineList, HttpStatus.OK);
@@ -166,17 +154,12 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Delete - OK")
     public void testDeleteOK() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
-        cuisineTest1.setContinent("continentTest1");
-        cuisineTest1.setId(5L);
-
         ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(HttpStatus.OK);
 
-        doReturn(responseEntityAnswer).when(cuisineService).deleteCuisine(20L);
+        doReturn(responseEntityAnswer).when(cuisineService).deleteCuisine(5L);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/cuisine/delete/{id}", 20L)
+                .delete("/api/cuisine/delete/{id}", 5L)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -197,11 +180,6 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Put - OK")
     public void testPutOK() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
-        cuisineTest1.setContinent("continentTest1");
-        cuisineTest1.setId(5L);
-
         ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(cuisineTest1, HttpStatus.OK);
 
         doReturn(responseEntityAnswer).when(cuisineService).updateCuisine(5L, cuisineTest1);
@@ -217,11 +195,6 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Put - NOTFOUND")
     public void testPutNOTFOUND() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
-        cuisineTest1.setContinent("continentTest1");
-        cuisineTest1.setId(5L);
-
         ResponseEntity<?> responseEntityAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         doReturn(responseEntityAnswer).when(cuisineService).updateCuisine(25L, cuisineTest1);
@@ -236,10 +209,7 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Put - Invalid because country is Empty")
     public void testPutInvalidCountryEmpty() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
         cuisineTest1.setCountry("");
-        cuisineTest1.setContinent("continentTest1");
-        cuisineTest1.setId(5L);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/cuisine/put/{id}", 5L)
@@ -251,10 +221,7 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Put - Invalid because country is longer than 50")
     public void testPutInvalidCountryToLong() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
         cuisineTest1.setCountry("Lorem ipsum dolor sit amet, consectetur erat curae.");
-        cuisineTest1.setContinent("continentTest1");
-        cuisineTest1.setId(5L);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/cuisine/put/{id}", 5L)
@@ -266,10 +233,7 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Put - Invalid because continent is Empty")
     public void testPutInvalidContinentEmpty() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
         cuisineTest1.setContinent("");
-        cuisineTest1.setId(5L);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/cuisine/put/{id}", 5L)
@@ -281,10 +245,7 @@ public class CuisineControllerTests {
     @Test
     @DisplayName("Test Put - Invalid because continent is longer than 50")
     public void testPutInvalidContinentToLong() throws Exception {
-        Cuisine cuisineTest1 = new Cuisine();
-        cuisineTest1.setCountry("countryTest1");
         cuisineTest1.setContinent("Lorem ipsum dolor sit amet, consectetur erat curae.");
-        cuisineTest1.setId(5L);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/cuisine/put/{id}", 5L)
