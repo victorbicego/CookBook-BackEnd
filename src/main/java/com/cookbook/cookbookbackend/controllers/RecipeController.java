@@ -25,26 +25,26 @@ public class RecipeController {
 
     @GetMapping("/result")
     public ResponseEntity<?> findRecipeByInputAndFilter
-            (@RequestParam String inputText,
-             @RequestParam(required = false) Category filterCategory,
-             @RequestParam(required = false) DifficultyGrade filterDifficultyGrade,
-             @RequestParam(required = false) Double filterRating,
-             @RequestParam(required = false) Integer filterPreparationTime,
-             @RequestParam(required = false) String filterCuisine,
+            (@RequestParam String input,
+             @RequestParam(required = false) Category category,
+             @RequestParam(required = false) DifficultyGrade difficultyGrade,
+             @RequestParam(required = false) Double rating,
+             @RequestParam(required = false) Integer preparationTime,
+             @RequestParam(required = false) String cuisine,
              @RequestParam Integer page,
              @RequestParam Integer quantity) {
-        return recipeService.findRecipeByInputAndFilter(inputText, filterCategory, filterDifficultyGrade, filterRating, filterPreparationTime, filterCuisine, page, quantity);
+        return recipeService.findRecipeByInputAndFilter(input, category, difficultyGrade, rating, preparationTime, cuisine, page, quantity);
     }
 
     @GetMapping("/result/total")
     public ResponseEntity<?> countRecipeByInputAndFilter
-            (@RequestParam String inputText,
-             @RequestParam(required = false) Category filterCategory,
-             @RequestParam(required = false) DifficultyGrade filterDifficultyGrade,
-             @RequestParam(required = false) Double filterRating,
-             @RequestParam(required = false) Integer filterPreparationTime,
-             @RequestParam(required = false) String filterCuisine) {
-        return recipeService.countTotalOfRecipesByInputAndFilter(inputText, filterCategory, filterDifficultyGrade, filterRating, filterPreparationTime, filterCuisine);
+            (@RequestParam String input,
+             @RequestParam(required = false) Category category,
+             @RequestParam(required = false) DifficultyGrade difficultyGrade,
+             @RequestParam(required = false) Double rating,
+             @RequestParam(required = false) Integer preparationTime,
+             @RequestParam(required = false) String cuisine) {
+        return recipeService.countTotalOfRecipesByInputAndFilter(input, category, difficultyGrade, rating, preparationTime, cuisine);
     }
 
     @GetMapping("/get/{id}")
