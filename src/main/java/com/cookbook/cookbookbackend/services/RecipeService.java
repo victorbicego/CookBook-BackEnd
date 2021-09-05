@@ -202,7 +202,7 @@ public class RecipeService {
     }
 
     public ResponseEntity<?> findTop5RecipesByDateOfPost() {
-        return new ResponseEntity<>(recipeRepository.findTop5RecipesByOrderByDateOfPostDesc(), HttpStatus.OK);
+        return new ResponseEntity<>(recipeRepository.findTop5RecipesByOrderByDateOfPostAsc(), HttpStatus.OK);
     }
 
 }

@@ -48,5 +48,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     List<Recipe> findTop3RecipesByOrderByRatingDesc();
 
-    List<Recipe> findTop5RecipesByOrderByDateOfPostDesc();
+    List<Recipe> findTop5RecipesByOrderByDateOfPostAsc();
 }
